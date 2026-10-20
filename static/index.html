@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173e38">
+  <meta name="description" content="영상의 맥락을 확인하고, 근거를 검토하고, 직접 확인한 댓글을 남기는 로컬 과제 시연 도구입니다.">
+  <title>맥락 스튜디오 · 영상의 맥락에서 댓글까지</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js?v=0.1.4" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">작업 화면으로 건너뛰기</a>
+  <header class="site-header">
+    <div class="brand" aria-label="맥락 스튜디오">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M7 7h18v13a5 5 0 0 1-5 5h-8l-5 4V7Z" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/><path d="M12 13h8M12 18h5" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg></span>
+      <div><strong>맥락 스튜디오</strong><span class="brand-caption">CONTEXT TO CONVERSATION</span></div>
+    </div>
+    <div class="header-actions">
+      <span class="local-badge"><span class="status-dot"></span>내 컴퓨터에서 실행</span>
+      <button id="settings-open" class="button button-quiet button-small" type="button"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m8.5 2-.5 2-1.8 1L4.3 4.5l-1.5 2.6L4.3 8v2l-1.5 1 1.5 2.6 1.9-.4L8 14.3l.5 2h3l.5-2 1.8-1.1 1.9.4 1.5-2.6-1.5-1V8l1.5-.9-1.5-2.6-1.9.5L12 4l-.5-2h-3Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="10" cy="9.2" r="2.5" stroke="currentColor" stroke-width="1.3"/></svg>연결 설정</button>
+    </div>
+  </header>
+
+  <main class="main-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="intro-copy"><p class="eyebrow">TRACK 02 <span></span> MARKETING AGENT</p><h1 id="page-title">영상의 맥락에서 <em>댓글까지.</em></h1><p class="intro-description">살펴보고, 근거를 확인하고, 내 말로 남기는 한 번의 흐름.</p></div>
+      <div class="session-stats" aria-label="실행 통계">
+        <div class="stat"><span>오늘 실제 등록</span><strong><span id="daily-used">—</span><small> / <span id="daily-limit">—</span></small></strong></div>
+        <div class="stat"><span>누적 실제 등록</span><strong id="total-success">—</strong></div>
+        <div class="stat stat-profile"><span>전용 브라우저</span><strong id="profile-summary">연결 확인 중</strong></div>
+      </div>
+    </section>
+
+    <div id="global-error" class="notice notice-error" role="alert" hidden><span id="global-error-text"></span><button id="bootstrap-retry" type="button" class="text-button">다시 연결</button></div>
+
+    <section class="workspace-toolbar" aria-label="데이터 모드">
+      <div class="mode-switch" role="group" aria-label="작업 모드 선택">
+        <button id="mode-sample" type="button" class="mode-button active" aria-pressed="true"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 2v5L3.4 13A2 2 0 0 0 5.1 16h7.8a2 2 0 0 0 1.7-3L11 7V2M6 2h6M5 11h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>연습 데이터</button>
+        <button id="mode-live" type="button" class="mode-button" aria-pressed="false"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="2" y="4" width="14" height="10" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="m7.5 6.6 4 2.4-4 2.4V6.6Z" fill="currentColor"/></svg>실제 YouTube</button>
+      </div>
+      <p id="mode-description" class="mode-description"><span class="sample-dot"></span>가상 영상으로 흐름을 확인해요. YouTube에는 등록되지 않습니다.</p>
+      <span class="workflow-count">01 <span>—</span> 03</span>
+    </section>
+
+    <section id="workspace" class="workspace" aria-label="댓글 작성 작업 화면">
+      <section class="panel video-panel" aria-labelledby="videos-heading">
+        <div class="panel-heading"><div class="step-title"><span class="step-number">01</span><h2 id="videos-heading">영상 불러오기</h2></div><span id="video-count" class="count-badge">0</span></div>
+        <div class="video-tools">
+          <div class="field search-field"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.4" stroke="currentColor" stroke-width="1.5"/><path d="m13 13 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><label class="sr-only" for="video-search">불러온 영상 검색</label><input id="video-search" type="search" placeholder="불러온 영상 검색" autocomplete="off"></div>
+          <div class="filter-row"><label class="sr-only" for="channel-filter">채널 선택</label><select id="channel-filter"><option value="">모든 채널</option></select><button id="videos-refresh" class="icon-button" type="button" aria-label="영상 새로 불러오기" title="영상 새로 불러오기"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16 7a6.4 6.4 0 1 0 .4 5M16 3v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        </div>
+        <div id="video-warnings" class="inline-warnings" hidden></div>
+        <div id="video-list" class="video-list" aria-label="영상 목록" aria-busy="true"><div class="empty-state compact"><span class="loader" aria-hidden="true"></span><p>작업 공간을 준비하고 있어요.</p></div></div>
+        <div class="video-footer"><span id="video-list-caption">연습용으로 만든 가상 영상입니다.</span></div>
+        <details id="resolve-panel" class="url-panel" hidden><summary><span class="tiny-plus" aria-hidden="true">+</span>영상 주소로 직접 불러오기</summary><form id="resolve-form"><label for="resolve-url">YouTube 영상 주소</label><div class="input-action"><input id="resolve-url" maxlength="500" type="url" placeholder="https://www.youtube.com/watch?v=…" autocomplete="off" required><button id="resolve-button" class="button button-secondary button-small" type="submit">추가</button></div><p>설정에 등록한 본인 테스트 영상만 댓글 시연에 사용할 수 있어요.</p><p id="resolve-error" class="field-error" role="alert" hidden></p></form></details>
+      </section>
+
+      <section class="panel draft-panel" aria-labelledby="draft-heading">
+        <div class="panel-heading"><div class="step-title"><span class="step-number">02</span><h2 id="draft-heading">영상 선택 · 초안</h2></div><span id="analysis-status" class="status-label">선택 대기</span></div>
+        <div id="draft-empty" class="empty-state draft-empty"><div class="empty-illustration" aria-hidden="true"><svg viewBox="0 0 128 104" fill="none"><rect x="17" y="14" width="85" height="61" rx="10" fill="#fff" stroke="#bdcbc3" stroke-width="1.5"/><rect x="25" y="22" width="69" height="43" rx="5" fill="#e6ede7"/><path d="m52 34 21 10-21 10V34Z" fill="#66867a"/><rect x="53" y="62" width="60" height="30" rx="9" fill="#173e38"/><path d="m62 88-2 10 15-10" fill="#173e38"/><path d="M65 73h34M65 80h23" stroke="#edf1e8" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="82" r="4" fill="#d3ac5b"/><path d="M109 15v8M105 19h8" stroke="#c4a162" stroke-width="2" stroke-linecap="round"/></svg></div><h3>어떤 이야기에 답할까요?</h3><p>왼쪽에서 영상을 선택하면<br>내용의 근거와 댓글 초안을 함께 볼 수 있어요.</p><span class="gentle-label">한 번에 영상 하나, 댓글 하나</span></div>
+        <div id="draft-content" class="draft-content" hidden>
+          <div class="selected-video"><div class="selected-label"><span id="selected-source" class="source-tag">연습 영상</span><a id="selected-link" class="text-link" target="_blank" rel="noopener noreferrer" hidden>영상 보기 <span aria-hidden="true">↗</span></a></div><h3 id="selected-title"></h3><p id="selected-meta"></p></div>
+          <details id="transcript-details" class="transcript-panel"><summary><span>자막 또는 내용 직접 붙여넣기</span><span class="optional-label">선택</span></summary><div class="transcript-body"><label for="transcript-input">영상에서 직접 확인한 자막·내용</label><textarea id="transcript-input" maxlength="24000" rows="4" placeholder="자동으로 자막을 가져오지 못했을 때, 직접 확인한 내용을 붙여넣으세요. 시각을 알고 있다면 함께 적어주세요."></textarea><p>직접 제공한 내용은 AI 요청에 포함됩니다. 개인정보는 넣지 마세요.</p></div></details>
+          <button id="analyze-button" class="button button-primary analyze-button" type="button"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m11.5 2-2 6H4l4.5 3-2 7 9-10h-6l2-6Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span id="analyze-button-label">영상 분석하고 초안 만들기</span></button>
+          <div id="technical-test-panel" class="notice" hidden>
+            <button id="technical-test-button" class="button button-secondary analyze-button" type="button">AI 없이 게시 테스트 초안 만들기</button>
+            <p>본인 영상의 브라우저 입력·게시 확인용 고정 문구입니다. AI 분석·마케팅 초안과 별개이며 이 버튼만으로 게시하지 않습니다.</p>
+          </div>
+          <div id="analysis-error" class="notice notice-error" role="alert" hidden></div>
+          <div id="analysis-loading" class="analysis-loading" role="status" hidden><span class="loader" aria-hidden="true"></span><div><strong id="analysis-loading-title">영상의 맥락을 살펴보고 있어요.</strong><p id="analysis-loading-text">확인 가능한 내용과 댓글에 쓸 근거를 정리합니다.</p></div></div>
+          <div id="analysis-result" hidden>
+            <section class="evidence-card" aria-labelledby="evidence-heading"><div class="section-caption"><h4 id="evidence-heading"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M5 2h8v14H5V2ZM7 6h4M7 9h4M7 12h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>내용 근거</h4><span id="evidence-source" class="evidence-source"></span></div><p id="worry-text" class="worry-text"></p><blockquote id="evidence-quote"></blockquote><p id="evidence-timestamp" class="evidence-timestamp" hidden></p></section>
+            <div id="analysis-warnings" class="inline-warnings analysis-warnings" hidden></div>
+            <section class="comment-editor" aria-labelledby="comment-heading"><div class="section-caption"><h4 id="comment-heading"><label for="comment-input">댓글 초안</label></h4><button id="comment-copy" class="text-button" type="button"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M10 5V2.5A1.5 1.5 0 0 0 8.5 1h-6A1.5 1.5 0 0 0 1 2.5v7A1.5 1.5 0 0 0 2.5 11H5" stroke="currentColor" stroke-width="1.2"/></svg>복사</button></div><textarea id="comment-input" maxlength="2000" rows="4" spellcheck="false" aria-describedby="comment-guidance comment-count"></textarea><div class="editor-footer"><span id="comment-guidance">직접 읽고, 내 말로 다듬어 주세요.</span><span id="comment-count" class="character-count">0 <span>/ 40–120자</span></span></div></section>
+            <div id="comment-checks" class="comment-checks" aria-live="polite"></div>
+            <p id="validation-error" class="field-error" role="alert" hidden></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel publish-panel" aria-labelledby="publish-heading">
+        <div class="panel-heading"><div class="step-title"><span class="step-number">03</span><h2 id="publish-heading">댓글 달기</h2></div><span id="publish-mode-tag" class="outline-tag">연습 모드</span></div>
+        <div class="publish-content">
+          <div id="publish-notice" class="publish-notice"><div class="round-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9 3v7l-5 8a2 2 0 0 0 1.7 3h12.6a2 2 0 0 0 1.7-3l-5-8V3M8 3h8M7 15h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3 id="publish-notice-title">먼저 편하게 연습해요.</h3><p id="publish-notice-text">로컬 연습 화면에 댓글을 입력하는 과정을 확인합니다. YouTube에는 등록되지 않아요.</p></div>
+          <div class="execution-summary"><div><span>선택한 영상</span><strong id="execution-video">선택 전</strong></div><div><span>댓글 상태</span><strong id="execution-draft">초안 대기</strong></div><div><span>실행 위치</span><strong id="execution-target">로컬 연습 화면</strong></div></div>
+          <div id="live-profile" class="profile-card" hidden><div class="profile-card-top"><span class="profile-avatar" aria-hidden="true"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="7" r="3.3" stroke="currentColor" stroke-width="1.5"/><path d="M4 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" stroke-width="1.5"/></svg></span><div><span>전용 브라우저 프로필</span><strong id="profile-name">확인 전</strong></div></div><p id="profile-help">전용 Chrome에서 본인 계정에 로그인한 뒤 브라우저를 닫아 주세요.</p><div class="profile-buttons"><button id="profile-open" class="button button-secondary button-small" type="button">로그인 브라우저 열기</button><button id="profile-close" class="text-button" type="button" title="이 도구의 자동화 창을 닫습니다. 로그인용 Chrome 창은 직접 닫아 주세요.">자동화 창 닫기</button><button id="profile-refresh" class="text-button" type="button">프로필 준비 확인</button></div><p id="profile-message" class="profile-message" role="status" hidden></p></div>
+          <p id="action-blocked-reason" class="action-reason">영상과 댓글 초안을 준비하면 시작할 수 있어요.</p>
+          <button id="execute-button" class="button button-primary execute-button" type="button" disabled><span id="execute-label">로컬 입력 연습</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <a id="practice-link" class="practice-link" href="/practice" target="_blank" rel="noopener">연습 화면 미리 보기 <span aria-hidden="true">↗</span></a>
+          <p id="publish-footnote" class="publish-footnote">실행 전 준비된 초안을 다시 확인할 수 있어요.</p>
+          <section id="job-panel" class="job-panel" aria-labelledby="job-heading" hidden><div class="job-heading"><h4 id="job-heading">실행 기록</h4><span id="job-status" class="status-label"></span></div><div id="job-progress" class="job-progress"><span></span></div><p id="job-stage" class="job-stage"></p><ol id="job-events" class="job-events"></ol><div id="job-error" class="notice notice-error" role="alert" hidden></div><div id="job-links" class="job-links"></div><button id="job-recheck" class="text-button" type="button" hidden>실행 상태 다시 확인</button><button id="job-verify-existing" class="text-button" type="button" hidden>기존 댓글 재확인 · 새 게시 없음</button><p id="verification-details" class="profile-message" hidden></p></section>
+        </div>
+      </section>
+    </section>
+
+    <section class="history-section" aria-labelledby="history-heading"><div class="history-header"><div><h2 id="history-heading">최근 실행 기록 <span id="history-count" class="count-badge">0</span></h2><p>연습과 실제 등록을 구분해 기록합니다.</p></div><button id="history-refresh" class="text-button" type="button"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M14.5 6.5A5.8 5.8 0 1 0 15 11M14.5 3v3.5H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>새로고침</button></div><div id="history-content" class="history-content"><p class="history-empty">아직 실행한 기록이 없습니다. 영상 하나를 선택해 시작해 보세요.</p></div></section>
+    <footer class="site-footer"><span>맥락을 이해한 다음, 대화를 시작하세요.</span><span id="app-version">로컬 과제 시연 도구</span></footer>
+  </main>
+
+  <dialog id="settings-dialog" class="modal settings-modal" aria-labelledby="settings-title"><form id="settings-form"><div class="modal-heading"><div><p class="eyebrow">CONNECTIONS</p><h2 id="settings-title">작업 환경 연결</h2></div><button id="settings-close" class="icon-button" type="button" aria-label="설정 닫기"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div><div class="modal-body"><p class="modal-description">연습 데이터는 키 없이 사용할 수 있습니다. 실제 영상을 분석하려면 아래 연결을 준비해 주세요.</p><section class="settings-section"><div class="settings-section-heading"><span class="step-number small">1</span><h3>영상과 AI 연결</h3></div><div class="field"><label for="youtube-api-key">YouTube Data API 키 <span id="youtube-key-status" class="field-status">미등록</span></label><input id="youtube-api-key" maxlength="1000" type="password" autocomplete="new-password" placeholder="YouTube Data API 키 입력"><p>Google Cloud에서 YouTube Data API v3를 사용 설정한 뒤 발급한 키입니다. 영상 정보 조회에 사용합니다.</p></div><div class="form-grid"><div class="field"><label for="ai-provider">AI 제공자</label><select id="ai-provider"><option value="openai">OpenAI</option><option value="gemini">Google Gemini</option></select></div><div class="field"><label for="ai-model">모델 이름</label><input id="ai-model" maxlength="100" type="text" autocomplete="off" placeholder="사용 가능한 모델 ID"></div></div><div class="field"><label for="ai-api-key">AI API 키 <span id="ai-key-status" class="field-status">미등록</span></label><input id="ai-api-key" maxlength="1000" type="password" autocomplete="new-password" placeholder="선택한 제공자의 API 키 입력"><p>OpenAI Platform 또는 Google AI Studio에서 발급한 키입니다. 제공자를 바꾸면 키와 모델도 확인해 주세요. 실제 분석 시 영상 내용이 전송됩니다.</p></div><div class="storage-note"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="4" y="8" width="10" height="8" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M6 8V5a3 3 0 0 1 6 0v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><p>API 키는 이 컴퓨터의 설정 파일에 저장됩니다. 빈칸으로 저장하면 기존 키를 유지합니다. 공용 컴퓨터에서는 사용하지 마세요.</p></div></section><section class="settings-section"><div class="settings-section-heading"><span class="step-number small">2</span><h3>본인 테스트 영상</h3></div><p class="section-description">실제 댓글 시연은 본인 채널의 테스트 영상 1개로 제한됩니다.</p><div class="field"><label for="test-video-url">테스트 영상 주소</label><input id="test-video-url" maxlength="500" type="url" autocomplete="off" placeholder="https://www.youtube.com/watch?v=…"></div><div class="field"><label for="test-channel-id">테스트 영상의 채널 ID</label><input id="test-channel-id" maxlength="50" type="text" autocomplete="off" spellcheck="false" placeholder="UC로 시작하는 채널 ID"><p>채널 핸들(@이름)이 아닌 YouTube 채널 ID를 입력하세요.</p></div><div class="form-grid"><div class="field"><label for="expected-handle">댓글을 남길 계정 핸들</label><input id="expected-handle" maxlength="100" type="text" autocomplete="off" placeholder="@내채널핸들"></div><div class="field"><label for="daily-limit-input">하루 실제 등록 한도</label><input id="daily-limit-input" type="number" min="1" max="10" step="1" value="3"></div></div></section><div id="settings-error" class="notice notice-error" role="alert" hidden></div></div><div class="modal-footer"><button id="settings-cancel" class="button button-secondary" type="button">취소</button><button id="settings-save" class="button button-primary" type="submit">설정 저장</button></div></form></dialog>
+
+  <dialog id="confirm-dialog" class="modal confirm-modal" aria-labelledby="confirm-title"><div class="modal-heading"><div><p id="confirm-eyebrow" class="eyebrow">FINAL CHECK</p><h2 id="confirm-title">이 댓글로 연습할까요?</h2></div><button id="confirm-close" class="icon-button" type="button" aria-label="확인 창 닫기"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div><div class="modal-body"><p id="confirm-description" class="modal-description"></p><dl class="confirm-details"><div><dt>영상</dt><dd id="confirm-video"></dd></div><div><dt>실행 위치</dt><dd id="confirm-target"></dd></div><div><dt>프로필</dt><dd id="confirm-profile"></dd></div></dl><div class="confirm-comment"><span>등록할 댓글 전문</span><p id="confirm-comment-text"></p></div><label class="checkbox-field" for="confirm-checkbox"><input id="confirm-checkbox" type="checkbox"><span id="confirm-checkbox-label">영상과 댓글 내용을 확인했습니다.</span></label><div id="confirm-error" class="notice notice-error" role="alert" hidden></div></div><div class="modal-footer"><button id="confirm-cancel" class="button button-secondary" type="button">돌아가기</button><button id="confirm-submit" class="button button-primary" type="button" disabled>이 내용으로 연습</button></div></dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 10 3.5 3.5L15 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="toast-text"></span></div>
+</body>
+</html>

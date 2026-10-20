@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>로컬 입력 연습 | 맥락 스튜디오</title>
+  <link rel="stylesheet" href="/static/practice.css">
+  <script src="/static/practice.js" defer></script>
+</head>
+<body>
+<main>
+  <p class="eyebrow">맥락 스튜디오 · 연습 화면</p>
+  <h1>한 글자씩 입력되는 흐름을 확인하세요.</h1>
+  <p class="notice">여기는 이 컴퓨터에서만 열리는 연습 페이지입니다. 실제 YouTube 영상이나 댓글이 아니며, 저장 버튼을 눌러도 YouTube에 게시되지 않습니다.</p>
+  <section aria-labelledby="comment-heading">
+    <h2 id="comment-heading">연습 댓글</h2>
+    <label for="editor">입력 내용</label>
+    <textarea id="editor" data-testid="practice-editor" rows="5" placeholder="대시보드에서 로컬 입력 연습을 누르면 글자가 입력됩니다."></textarea>
+    <button id="save" type="button">연습 댓글 저장</button>
+    <div id="result" hidden><h3>이 연습 화면에서 확인한 내용</h3><p data-testid="practice-saved"></p></div>
+  </section>
+  <p class="small">이 결과는 실제 게시 성공 기록과 별도로 분류됩니다.</p>
+</main>
+</body>
+</html>
