@@ -1,0 +1,39 @@
+# Local secrets and user/browser state
+.venv/
+venv/
+runtime_data/
+**/profiles/
+**/settings.json
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+.env
+.env.*
+!*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+
+# Python and test files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+test-results/
+playwright-report/
+*.zip
+
+# Editor, OS and recorded media
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.mp4
+*.mov
+*.webm
